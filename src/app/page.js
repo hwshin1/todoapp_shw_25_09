@@ -124,10 +124,10 @@ const TodoListItem = ({ todosState, todo, index }) => {
               onChange={(e) => setEditContent(e.target.value)}
               className="flex-1"
             />
-            <Button variant="contained" size="small" onClick={commitEdit}>
+            <Button variant="contained" size="small" onClick={commitEdit} className='w-full sm:w-auto'>
               수정완료
             </Button>
-            <Button variant="outlined" size="small" onClick={cancelEdit}>
+            <Button variant="outlined" size="small" onClick={cancelEdit} className='w-full sm:w-auto'>
               수정취소
             </Button>
           </div>
@@ -159,10 +159,10 @@ const TodoListItem = ({ todosState, todo, index }) => {
 
 const TodoList = ({ todosState }) => {
   if (todosState.todos.length === 0) {
-    return <div className="text-gray-500">등록된 할 일이 없습니다.</div>;
+    return <div className="mt-4 text-gray-500">등록된 할 일이 없습니다.</div>;
   }
   return (
-    <ul className="grid gap-2">
+    <ul className="mt-4 grid gap-2">
       {todosState.todos.map((todo, index) => (
         <TodoListItem key={todo.id} todosState={todosState} todo={todo} index={index} />
       ))}

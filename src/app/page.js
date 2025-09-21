@@ -11,8 +11,8 @@ export default function App() {
 
   return (
     <div className="min-h-[100dvh] bg-gray-50">
-      <main className="mx-auto max-w-3xl px-5 py-6 font-sans">
-        <h1 className="mb-4 text-xl font-bold">간단 Todo App</h1>
+      <main className="w-full px-4 py-5 sm:mx-auto sm:max-w-[640px] sm:px-6 md:max-w-[768px]">
+        <h1 className="mb-3 text-base sm:text-xl md:text-2xl font-bold">간단 Todo App</h1>
         <TodoApp todosState={todosState} />
       </main>
     </div>
@@ -53,7 +53,9 @@ const NewTodoForm = ({ todosState, className = '' }) => {
 
   return (
     <section className={className}>
-      <form onSubmit={onSubmit} className="flex items-center gap-2">
+      <form
+        onSubmit={onSubmit}
+        className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3">
         <TextField
           name="content"
           label="할 일"
@@ -61,14 +63,16 @@ const NewTodoForm = ({ todosState, className = '' }) => {
           size="small"
           placeholder="할일을 입력해주세요."
           autoComplete="off"
-          className="flex-1"
+          className="w-full sm:flex-1"
         />
-        <Button variant="contained" size="small" type="submit">
-          추가
-        </Button>
-        <Button variant="outlined" size="small" type="reset">
-          취소
-        </Button>
+        <div className="grid grid-cols-2 gap-2 sm:flex sm:gap-3 w-full sm:w-auto">
+          <Button variant="contained" size="small" type="submit" className="w-full sm:w-auto">
+            추가
+          </Button>
+          <Button variant="outlined" size="small" type="reset" className="w-full sm:w-auto">
+            취소
+          </Button>
+        </div>
       </form>
     </section>
   );
@@ -80,7 +84,6 @@ const TodoListItem = ({ todosState, todo, index }) => {
   const editRef = useRef(null);
 
   const removeTodo = () => todosState.removeTodo(index);
-
   const toggleDone = () => todosState.toggleDone(index);
 
   const commitEdit = () => {
@@ -99,22 +102,30 @@ const TodoListItem = ({ todosState, todo, index }) => {
   };
 
   return (
-    <li className="grid grid-cols-[auto_auto_1fr_auto] items-center gap-2 rounded-xl border border-gray-200 bg-white px-3 py-2">
-      <Checkbox
-        checked={todo.done}
-        onChange={toggleDone}
-        size="small"
-        inputProps={{ 'aria-label': `${todo.id}번 완료 여부` }}
-      />
-
-      <div className="flex items-center gap-2 text-xs text-gray-600">
-        <span className="font-semibold">#{todo.id}</span>
-        <span>{todo.regDate}</span>
+    <li
+      className="
+        grid items-start sm:items-center gap-2
+        grid-cols-1 sm:grid-cols-[auto_auto_1fr_auto]
+        px-0 py-2
+        sm:rounded-xl sm:border sm:border-gray-200 sm:bg-white
+        sm:px-4 sm:py-3 sm:shadow-sm
+      ">
+      <div className="flex items-center gap-2">
+        <Checkbox
+          checked={todo.done}
+          onChange={toggleDone}
+          size="small"
+          inputProps={{ 'aria-label': `${todo.id}번 완료 여부` }}
+        />
+        <div className="flex items-center gap-2 text-xs text-gray-600">
+          <span className="font-semibold">#{todo.id}</span>
+          <span className="whitespace-nowrap">{todo.regDate}</span>
+        </div>
       </div>
 
-      <div className="min-w-0">
+      <div className="min-w-0 sm:col-span-2">
         {editMode ? (
-          <div className="flex items-center gap-2">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
             <TextField
               inputRef={editRef}
               variant="outlined"
@@ -122,14 +133,24 @@ const TodoListItem = ({ todosState, todo, index }) => {
               placeholder="할일 입력"
               value={editContent}
               onChange={(e) => setEditContent(e.target.value)}
-              className="flex-1"
+              className="w-full"
             />
-            <Button variant="contained" size="small" onClick={commitEdit} className='w-full sm:w-auto'>
-              수정완료
-            </Button>
-            <Button variant="outlined" size="small" onClick={cancelEdit} className='w-full sm:w-auto'>
-              수정취소
-            </Button>
+            <div className="grid grid-cols-2 gap-2 sm:flex sm:gap-2">
+              <Button
+                variant="contained"
+                size="small"
+                onClick={commitEdit}
+                className="w-full sm:w-auto">
+                수정완료
+              </Button>
+              <Button
+                variant="outlined"
+                size="small"
+                onClick={cancelEdit}
+                className="w-full sm:w-auto">
+                수정취소
+              </Button>
+            </div>
           </div>
         ) : (
           <span
@@ -144,10 +165,18 @@ const TodoListItem = ({ todosState, todo, index }) => {
       <div className="flex items-center justify-end gap-2">
         {!editMode && (
           <>
-            <Button variant="contained" size="small" onClick={() => setEditMode(true)}>
+            <Button
+              variant="contained"
+              size="small"
+              onClick={() => setEditMode(true)}
+              className="w-full sm:w-auto">
               수정
             </Button>
-            <Button variant="outlined" size="small" onClick={removeTodo}>
+            <Button
+              variant="outlined"
+              size="small"
+              onClick={removeTodo}
+              className="w-full sm:w-auto">
               삭제
             </Button>
           </>
@@ -159,10 +188,10 @@ const TodoListItem = ({ todosState, todo, index }) => {
 
 const TodoList = ({ todosState }) => {
   if (todosState.todos.length === 0) {
-    return <div className="mt-4 text-gray-500">등록된 할 일이 없습니다.</div>;
+    return <div className="text-gray-500">등록된 할 일이 없습니다.</div>;
   }
   return (
-    <ul className="mt-4 grid gap-2">
+    <ul className="grid gap-2 sm:gap-3">
       {todosState.todos.map((todo, index) => (
         <TodoListItem key={todo.id} todosState={todosState} todo={todo} index={index} />
       ))}
@@ -172,9 +201,13 @@ const TodoList = ({ todosState }) => {
 
 const TodoApp = ({ todosState }) => {
   return (
-    <section className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
+    <section
+      className="
+        p-0
+        sm:rounded-2xl sm:border sm:border-gray-200 sm:bg-white sm:p-5 sm:shadow-sm
+      ">
       <NewTodoForm todosState={todosState} />
-      <Divider className="my-4" />
+      <Divider className="my-3 sm:my-5" />
       <TodoList todosState={todosState} />
     </section>
   );
